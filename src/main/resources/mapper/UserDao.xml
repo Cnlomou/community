@@ -1,0 +1,26 @@
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="group.jsjxh.community.dao.UserDao">
+    <sql id="showField">
+        tb_user.ACCOUNT_ID,tb_user .NAME,tb_user .TOKEN,tb_user.CREATE_AT,tb_user.UPDATE_AT
+        FROM tb_user
+    </sql>
+    <resultMap id="userMap" type="group.jsjxh.community.bean.User">
+        <result property="account_id" column="ACCOUNT_ID"/>
+        <result property="name" column="NAME"/>
+        <result property="token" column="TOKEN"/>
+        <result property="create_at" javaType="java.util.Date" column="CREATE_AT" jdbcType="TIMESTAMP"/>
+        <result property="update_at" javaType="java.util.Date" column="UPDATE_AT" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    <select id="findUserByToken" parameterType="java.lang.String" resultType="group.jsjxh.community.bean.User" resultMap="userMap">
+        SELECT
+        <include refid="showField"/>
+        WHERE tb_user .TOKEN=#{token}
+    </select>
+
+    <insert id="saveUser" parameterType="group.jsjxh.community.bean.User">
+        insert into tb_user values(default,#{account_id},#{name},#{token},default ,now())
+    </insert>
+</mapper>

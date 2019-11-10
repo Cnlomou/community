@@ -8,21 +8,14 @@ import group.jsjxh.community.dao.UserDao;
 import group.jsjxh.community.dto.AccessTokenDTO;
 import group.jsjxh.community.dto.AccessTokenProvider;
 import group.jsjxh.community.provider.GithubUserInfoProvider;
-import group.jsjxh.community.util.UserUtil;
-import group.jsjxh.community.util.UuidUtil;
+import group.jsjxh.community.service.AuthorizeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.thymeleaf.util.StringUtils;
-
 import javax.annotation.Resource;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 
 @Controller
@@ -31,7 +24,7 @@ public class AuthorizeController {
     @Resource
     GithubAuthorizeInfoProvider githubAuthorizeInfoProvider;
     @Resource
-    UserDao userDao;
+    AuthorizeService authorizeService;
 
     @GetMapping("/callback")
     public String githubCallbock(String code, String state,
@@ -51,20 +44,11 @@ public class AuthorizeController {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
-        if(userInfo!=null){
-            request.getSession().setAttribute("user", StringUtils.isEmpty(userInfo.getName())?"小白":userInfo.getName());
-            String uuid=UuidUtil.uuid();
-
-            Cookie token = new Cookie("_token", uuid);
-            token.setMaxAge(3*60);
-            response.addCookie(token);
-            userDao.saveUser(new User(userInfo.getId(), UserUtil.userName(userInfo.getName()),uuid ,null,null));
-        }
+       try{
+           authorizeService.saveUserInfo(userInfo,request,response);
+       }catch (Throwable ignored){
+           ignored.printStackTrace();
+       }
         return "redirect:/";
-    }
-    @GetMapping("/getuser/{token}")
-    @ResponseBody
-    public User gitUser(@PathVariable("token") String token){
-       return userDao.findUserByToken(token);
     }
 }

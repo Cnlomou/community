@@ -37,7 +37,9 @@ public class WebMvcAdapterConfiguration implements WebMvcConfigurer {
                         String cookieToken = getCookieToken(request);
                         if(cookieToken!=null)
                              user=userService.getUserByTokne(cookieToken);
-                        redirectByUser(user,request);
+                        if(user==null)
+                            throw  new RuntimeException();
+                        request.getSession().setAttribute("user",user);
                     }
                 }catch (RuntimeException e){
                     response.sendRedirect("/");
@@ -61,10 +63,5 @@ public class WebMvcAdapterConfiguration implements WebMvcConfigurer {
                 if(cookie.getName().equals("_token"))
                     return cookie.getValue();
                 return null;
-    }
-    private void redirectByUser(User user,HttpServletRequest request){
-        if(user==null&&!request.getServletPath().equals("/")&&!request.getServletPath().equals(""))
-            throw new RuntimeException();
-        request.getSession().setAttribute("user",user);
     }
 }

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>社区主页</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+    <link rel="stylesheet" th:href="@{/css/bootstrap-theme.min.css}">
+    <script type="application/javascript" th:src="@{/webjars/jquery/3.0.0/jquery.min.js}"></script>
+    <script type="application/javascript" th:src="@{/webjars/bootstrap/4.3.0/js/bootstrap.min.js}"></script>
+    <style>
+        body{
+            background: #efefef;
+            padding-bottom: 100px;
+        }
+        .publish_body{
+            background: white;
+            margin-left: 50px;
+            margin-right: 50px;
+            padding-top: 20px;
+            padding-bottom: 50px;
+        }
+        .publish_lable,ul,li,p{
+            padding: 0px;
+            margin: 0px;
+        }
+        .publish_lable{
+            height: 60px;
+        }
+        .publish_head{
+            padding: 0px 0px 20px 0px;
+            margin: 0px;
+        }
+        .publish_head div{
+            width: 60%;
+        }
+        .tag_add{
+            margin: 20px 0 150px 0;
+            width: 30%;
+        }
+        .tag_add button{
+            margin: 10px 0 0 0;
+        }
+        #publish{
+            width: 15%;
+            float: right;
+        }
+        li p spn{
+            color: red;
+        }
+        ul{
+            margin-top: 20px;
+        }
+        .ques_compass li{
+            margin-top: 23px;
+        }
+        p{
+            font-family: "宋体";
+            font-size: 18px;
+        }
+        .des{
+            color: rgb(144,144,144);
+        }
+    </style>
+</head>
+<body>
+<div class="container-fluid">
+    <div th:replace="~{nav::nav}"></div>
+</div>
+<div class="container-fluid publish_body">
+    <div class="row">
+        <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
+                <h2 class="publish_lable"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>发起</h2>
+                <form method="post" id="que_publish">
+                    <div class="publish_head">
+                        <div class="form-group-lg form-group-sm">
+                            <label for="title">问题标题（简明扼要）</label>
+                            <input type="email" class="form-control" id="title" name="title" placeholder="question title" required>
+                        </div>
+                    </div>
+                    <div class="form-group-lg form-group-sm">
+                        <label for="desc">问题补充（请参照右侧提示）</label>
+                        <textarea name="content" class="form-control" id="desc" rows="25"></textarea>
+                    </div>
+                    <div class="form-group tag_add">
+                        <label for="tag">添加标签:</label>
+                        <input type="text" class="form-control" id="tag" name="tag" placeholder="添加标签,用逗号分开">
+                    </div>
+                    <button type="button" class="btn btn-success"  id="publish">发布</button>
+                </form>
+        </div>
+        <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12" style="padding-left: 30px">
+            <h4>问题发起指南</h4>
+            <ul class="ques_compass">
+                <li><p><b>问题标题：</b><span class="des">请用</span><span style="color: red; font-weight: bold">简洁</span><span class="des">的语言来描述您要发布的问题，不超过25字</span></p></li>
+                <li>
+                    <p><b>问题补充：</b><span class="des">详细补充你您的问题内容，并确保问题描述的准确性，并提供一些相关资料</span></p>
+                </li>
+                <li>
+                    <p><b>添加标签：</b><span class="des">选择标签一个或者多个合适的标签，不超过</span><span style="color: red;font-weight: bold;">10</span><span class="des">个字</span></p>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<script type="application/javascript" th:inline="javascript">
+    $('#publish').click(function () {
+        var param=$('#que_publish').serialize();
+        $.post([[@{/publishaction}]],param,function(data){
+            alert(data);
+    },'json');
+    })
+</script>
+</body>
+</html>

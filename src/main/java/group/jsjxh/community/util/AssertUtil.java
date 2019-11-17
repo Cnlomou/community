@@ -1,8 +1,10 @@
 package group.jsjxh.community.util;
 
+import group.jsjxh.community.exception.ParamNoFoundException;
+
 public class AssertUtil {
-    public static void Null(Object object){
+    public static void Null(Object object,String msg) throws ParamNoFoundException {
         if(object==null)
-            throw new NullPointerException("is nullPoint");
+            throw new ParamNoFoundException(msg);
     }
 }

@@ -1,7 +1,7 @@
 create table TB_USER
 (
-    ID         INTEGER default (NEXT VALUE FOR PUBLIC.SYSTEM_SEQUENCE_1125C6DF_A2B4_43A4_857A_F1A29C1280DD) auto_increment,
-    ACCOUNT_ID BIGINT
+    ID         INTEGER auto_increment,
+    ACCOUNT_ID int
         constraint TB_USER_ACCOUNT_ID_UINDEX
             unique,
     NAME       VARCHAR(50),

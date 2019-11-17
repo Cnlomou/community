@@ -24,17 +24,20 @@ public class AuthorizeService {
     @Transactional
     public void saveUserInfo(@Nullable GithubUserInfo userInfo, HttpServletRequest request, HttpServletResponse response){
         String uuid= UuidUtil.uuid();
-        User userByAccount_id = userDao.findUserByAccount_id(userInfo.getId());
-        if(userByAccount_id ==null)
-            userDao.saveUser(new User(userInfo.getId(), UserUtil.userName(userInfo.getName()),uuid ,null,null));
+        User user = userDao.findUserByAccount_id(userInfo.getId());
+        if(user ==null){
+            user= new User(userInfo.getId(), UserUtil.userName(userInfo.getName()), uuid, null, null);
+            userDao.saveUser(user);
+        }
         else{
-
-            userByAccount_id.setToken(uuid);
-            userDao.updateUser(userByAccount_id);
+            user.setToken(uuid);
+            userDao.updateUser(user);
         }
         Cookie token = new Cookie("_token", uuid);
         token.setMaxAge(3*60);
         response.addCookie(token);
-        request.getSession().setAttribute("user", StringUtils.isEmpty(userInfo.getName())?"小白":userInfo.getName());
+        if(StringUtils.isEmpty(user.getName()))
+            user.setName("小白");
+        request.getSession().setAttribute("user",user );
     }
 }

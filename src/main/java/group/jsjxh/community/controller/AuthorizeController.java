@@ -2,9 +2,7 @@ package group.jsjxh.community.controller;
 
 
 import group.jsjxh.community.bean.GithubUserInfo;
-import group.jsjxh.community.bean.User;
 import group.jsjxh.community.config.GithubAuthorizeInfoProvider;
-import group.jsjxh.community.dao.UserDao;
 import group.jsjxh.community.dto.AccessTokenDTO;
 import group.jsjxh.community.dto.AccessTokenProvider;
 import group.jsjxh.community.provider.GithubUserInfoProvider;
@@ -30,6 +28,8 @@ public class AuthorizeController {
     public String githubCallbock(String code, String state,
                                  HttpServletRequest request,
                                  HttpServletResponse response){
+        String referer=request.getHeader("Referer");
+        referer=referer.substring(referer.indexOf("/"));
         GithubUserInfoProvider githubUserInfoProvider=new GithubUserInfoProvider();
         GithubUserInfo userInfo=null;
         AccessTokenDTO accessTokenDTO = new AccessTokenDTO();
@@ -49,6 +49,6 @@ public class AuthorizeController {
        }catch (Throwable ignored){
            ignored.printStackTrace();
        }
-        return "redirect:/";
+        return "redirect:"+referer;     //回到登陆之前得页面
     }
 }

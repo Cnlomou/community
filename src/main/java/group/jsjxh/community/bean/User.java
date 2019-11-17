@@ -3,11 +3,20 @@ package group.jsjxh.community.bean;
 import java.util.Date;
 
 public class User {
+    private Integer id;
     private long account_id;
     private String name;
     private String token;
     private Date create_at;
     private Date update_at;
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public long getAccount_id() {
         return account_id;

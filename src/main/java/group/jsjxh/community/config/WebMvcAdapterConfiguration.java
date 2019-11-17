@@ -53,7 +53,7 @@ public class WebMvcAdapterConfiguration implements WebMvcConfigurer {
             public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
 
             }
-        }).excludePathPatterns(Arrays.asList("/callback"));
+        }).excludePathPatterns(Arrays.asList("/callback")).addPathPatterns("/admin/**");
     }
     private String getCookieToken(HttpServletRequest request){
             for(Cookie cookie:request.getCookies())

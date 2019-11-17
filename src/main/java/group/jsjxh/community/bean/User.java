@@ -22,7 +22,8 @@ public class User {
         return account_id;
     }
 
-    public User(long account_id, String name, String token, Date create_at, Date update_at) {
+    public User(Integer id,Long account_id, String name, String token, Date create_at, Date update_at) {
+        this.id=id;
         this.account_id = account_id;
         this.name = name;
         this.token = token;

@@ -96,7 +96,7 @@
                     <p><b>问题补充：</b><span class="des">详细补充你您的问题内容，并确保问题描述的准确性，并提供一些相关资料</span></p>
                 </li>
                 <li>
-                    <p><b>添加标签：</b><span class="des">选择标签一个或者多个合适的标签，不超过</span><span style="color: red;font-weight: bold;">10</span><span class="des">个字</span></p>
+                    <p><b>添加标签：</b><span class="des">选择标签一个或者多个合适的标签，不超过</span><span style="color: red;font-weight: bold;">20</span><span class="des">个字</span></p>
                 </li>
             </ul>
         </div>
@@ -106,7 +106,7 @@
     $('#publish').click(function () {
         var param=$('#que_publish').serialize();
         $.post([[@{/publishaction}]],param,function(data){
-            alert(data);
+            alert(data.code+data.msg);
     },'json');
     })
 </script>

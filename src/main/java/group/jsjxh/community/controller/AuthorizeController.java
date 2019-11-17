@@ -6,7 +6,7 @@ import group.jsjxh.community.config.GithubAuthorizeInfoProvider;
 import group.jsjxh.community.dto.AccessTokenDTO;
 import group.jsjxh.community.dto.AccessTokenProvider;
 import group.jsjxh.community.provider.GithubUserInfoProvider;
-import group.jsjxh.community.service.AuthorizeService;
+import group.jsjxh.community.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -22,7 +22,7 @@ public class AuthorizeController {
     @Resource
     GithubAuthorizeInfoProvider githubAuthorizeInfoProvider;
     @Resource
-    AuthorizeService authorizeService;
+    UserService userService;
 
     @GetMapping("/callback")
     public String githubCallbock(String code, String state,
@@ -45,7 +45,7 @@ public class AuthorizeController {
             e.printStackTrace();
         }
        try{
-           authorizeService.saveUserInfo(userInfo,request,response);
+           userService.saveUserInfo(userInfo,request,response);
        }catch (Throwable ignored){
            ignored.printStackTrace();
        }

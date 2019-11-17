@@ -4,8 +4,6 @@ import group.jsjxh.community.bean.QuestionBean;
 import group.jsjxh.community.bean.User;
 import group.jsjxh.community.exception.ParamNoFoundException;
 import group.jsjxh.community.service.QuestionResolverService;
-import org.apache.catalina.security.SecurityUtil;
-import org.apache.shiro.SecurityUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;

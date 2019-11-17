@@ -39,7 +39,7 @@ public class WebMvcAdapterConfiguration implements WebMvcConfigurer {
                         redirectByUser(user,request);
                     }
                 }catch (RuntimeException e){
-                    response.sendRedirect("http://localhost:8887/");
+                    response.sendRedirect("/");
                 }
                 return true;
             }
@@ -53,7 +53,7 @@ public class WebMvcAdapterConfiguration implements WebMvcConfigurer {
             public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
 
             }
-        }).excludePathPatterns(Arrays.asList("/callback")).addPathPatterns("/admin/**");
+        }).excludePathPatterns(Arrays.asList("/callback")).addPathPatterns("/**");
     }
     private String getCookieToken(HttpServletRequest request){
             for(Cookie cookie:request.getCookies())
@@ -64,6 +64,6 @@ public class WebMvcAdapterConfiguration implements WebMvcConfigurer {
     private void redirectByUser(User user,HttpServletRequest request){
         if(user==null&&!request.getServletPath().equals("/")&&!request.getServletPath().equals(""))
             throw new RuntimeException();
-        request.getSession().setAttribute("user",user==null?null:user.getName());
+        request.getSession().setAttribute("user",user);
     }
 }

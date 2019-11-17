@@ -1,14 +1,19 @@
 package group.jsjxh.community.bean;
 
+import java.util.Date;
+
 public class TagBean {
     private Integer no;
-    private String tag;
-    private Integer qes_no;
+    private String name;
+    private Date create_at;
 
-    public TagBean(Integer no, String tag, Integer qes_no) {
+    public TagBean() {
+    }
+
+    public TagBean(Integer no, String name, Date create_at) {
         this.no = no;
-        this.tag = tag;
-        this.qes_no = qes_no;
+        this.name = name;
+        this.create_at = create_at;
     }
 
     public Integer getNo() {
@@ -19,19 +24,19 @@ public class TagBean {
         this.no = no;
     }
 
-    public String getTag() {
-        return tag;
+    public String getName() {
+        return name;
     }
 
-    public void setTag(String tag) {
-        this.tag = tag;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public Integer getQes_no() {
-        return qes_no;
+    public Date getCreate_at() {
+        return create_at;
     }
 
-    public void setQes_no(Integer qes_no) {
-        this.qes_no = qes_no;
+    public void setCreate_at(Date create_at) {
+        this.create_at = create_at;
     }
 }

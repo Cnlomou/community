@@ -41,11 +41,11 @@
         insert into tb_user values(default,#{account_id},#{name},#{token},now() ,now())
     </insert>
 
-    <update id="updateUser" parameterType="User" parameterMap="paramMap">
+    <update id="updateToken" parameterType="User">
         update
         <include refid="table"/>
         set
-        token='${token}' , update_at=now()   <!--更新uuid时 若不打引号，会出现unknow column -->
+        token='${token}' , update_at=#{update_at}   <!--更新uuid时 若不打引号，会出现unknow column -->
         where
         account_id=#{account_id}
     </update>

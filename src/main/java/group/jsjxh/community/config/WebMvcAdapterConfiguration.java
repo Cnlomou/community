@@ -2,6 +2,7 @@ package group.jsjxh.community.config;
 
 import group.jsjxh.community.bean.User;
 import group.jsjxh.community.dao.UserDao;
+import group.jsjxh.community.service.UserService;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -19,7 +20,7 @@ import java.util.Arrays;
 public class WebMvcAdapterConfiguration implements WebMvcConfigurer {
 
     @Resource
-    UserDao userDao;
+    UserService userService;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -35,7 +36,7 @@ public class WebMvcAdapterConfiguration implements WebMvcConfigurer {
                     if(StringUtils.isEmpty((String) request.getSession().getAttribute("user"))){
                         String cookieToken = getCookieToken(request);
                         if(cookieToken!=null)
-                             user=userDao.findUserByToken(cookieToken);
+                             user=userService.getUserByTokne(cookieToken);
                         redirectByUser(user,request);
                     }
                 }catch (RuntimeException e){
@@ -53,7 +54,7 @@ public class WebMvcAdapterConfiguration implements WebMvcConfigurer {
             public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
 
             }
-        }).excludePathPatterns(Arrays.asList("/callback")).addPathPatterns("/**");
+        }).excludePathPatterns(Arrays.asList("/callback","/")).addPathPatterns("/**");      //主页请求的servletpath是'/'
     }
     private String getCookieToken(HttpServletRequest request){
             for(Cookie cookie:request.getCookies())

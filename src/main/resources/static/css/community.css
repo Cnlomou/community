@@ -1,0 +1,55 @@
+body{
+    background: #efefef;
+    padding-bottom: 100px;
+}
+.publish_body,.discover-body{
+    background: white;
+    margin-left: 50px;
+    margin-right: 50px;
+    padding-top: 20px;
+    padding-bottom: 50px;
+}
+.publish-lable,.discover-lable,ul,li,p{
+    padding: 0px;
+    margin: 0px;
+}
+.publish-lable,.discover-lable{
+    height: 60px;
+}
+.publish-head{
+    padding: 0px 0px 20px 0px;
+    margin: 0px;
+}
+.publish-head div{
+    width: 60%;
+}
+.tag-add{
+    margin: 20px 0 150px 0;
+    width: 30%;
+}
+.tag-add button{
+    margin: 10px 0 0 0;
+}
+#publish{
+    width: 15%;
+    float: right;
+}
+li p spn{
+    color: red;
+}
+ul{
+    margin-top: 20px;
+}
+.ques-compass li{
+    margin-top: 23px;
+}
+p{
+    font-family: "宋体";
+    font-size: 18px;
+}
+.des{
+    color: rgb(144,144,144);
+}
+.user-image{
+    width: 50px;
+}

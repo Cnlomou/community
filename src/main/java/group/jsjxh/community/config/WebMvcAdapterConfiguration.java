@@ -33,7 +33,7 @@ public class WebMvcAdapterConfiguration implements WebMvcConfigurer {
                     return true;
                 User user=null;
                 try {
-                    if(StringUtils.isEmpty((String) request.getSession().getAttribute("user"))){
+                    if(request.getSession().getAttribute("user")==null){
                         String cookieToken = getCookieToken(request);
                         if(cookieToken!=null)
                              user=userService.getUserByTokne(cookieToken);
@@ -59,9 +59,12 @@ public class WebMvcAdapterConfiguration implements WebMvcConfigurer {
         }).excludePathPatterns(Arrays.asList("/callback","/")).addPathPatterns("/**");      //主页请求的servletpath是'/'
     }
     private String getCookieToken(HttpServletRequest request){
-            for(Cookie cookie:request.getCookies())
-                if(cookie.getName().equals("_token"))
-                    return cookie.getValue();
-                return null;
+
+        Cookie[] cookies = request.getCookies();
+        if(cookies!=null&&cookies.length>0) //没有cookies时进行遍历会报空指针异常
+            for(Cookie cookie: cookies)
+                    if(cookie.getName().equals("_token"))
+                        return cookie.getValue();
+         return null;
     }
 }

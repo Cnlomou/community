@@ -31,7 +31,11 @@ public class UserService {
         String uuid= UuidUtil.uuid();
         User user = this.getUserByAccount_id(userInfo.getId());//数据库找不到该数据返回null
         if(user ==null){
-            user= new User(0, userInfo.getId(), UserUtil.userName(userInfo.getName()), uuid, null, null);
+            user= new User();
+            user.setAccount_id(userInfo.getId());
+            user.setName(UserUtil.userName(userInfo.getName()));
+            user.setToken(uuid);
+            user.setPicUrl(userInfo.getAvatar_url());
             userDao.saveUser(user);
         }
         else{

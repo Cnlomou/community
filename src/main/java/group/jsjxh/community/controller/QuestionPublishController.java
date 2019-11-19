@@ -40,7 +40,10 @@ public class QuestionPublishController {
             return  objectObjectHashMap;
         }
         Integer author=((User)session.getAttribute("user")).getId();
-        QuestionBean questionBean = new QuestionBean(0,title,content,tags,new Date(),author);
+        QuestionBean questionBean = new QuestionBean();
+        questionBean.setTitle(title);
+        questionBean.setContent(content);
+        questionBean.setTag(tags);
         questionBean = questionResolverService.publishQuestion(questionBean);
         if(questionBean.getNo()!=0){
             objectObjectHashMap.put("code","ok");

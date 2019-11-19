@@ -40,7 +40,8 @@ public class AuthorizeController {
         AccessTokenProvider accessToken = githubUserInfoProvider.getAccessToken(accessTokenDTO, githubAuthorizeInfoProvider.getAccesTokenUrl());
         try {
             userInfo=githubUserInfoProvider.getUserInfo(accessToken,githubAuthorizeInfoProvider.getAccessUserUrl(), GithubUserInfo.class);
-            logger.info(userInfo.toString());
+            if(logger.isInfoEnabled())
+                logger.info(userInfo.toString());
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }

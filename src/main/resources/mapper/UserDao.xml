@@ -38,7 +38,7 @@
         where tb_user.account_id=#{account_id}
     </select>
     <insert id="saveUser" parameterType="group.jsjxh.community.bean.User" keyProperty="id" useGeneratedKeys="true">
-        insert into tb_user values(default,#{account_id},#{name},#{token},now() ,now())
+        insert into tb_user values(default,#{account_id},#{name},#{token},now() ,now(),#{picUrl})
     </insert>
 
     <update id="updateToken" parameterType="User">

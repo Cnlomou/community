@@ -1,14 +1,10 @@
 package group.jsjxh.community.controller;
 
-import com.github.pagehelper.PageHelper;
-import group.jsjxh.community.bean.DiscoverQuestionBean;
 import group.jsjxh.community.bean.QuestionBean;
 import group.jsjxh.community.bean.User;
 import group.jsjxh.community.exception.ParamNoFoundException;
 import group.jsjxh.community.service.QuestionResolverService;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;

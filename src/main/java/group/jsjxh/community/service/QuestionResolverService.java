@@ -1,7 +1,7 @@
 package group.jsjxh.community.service;
 
 import com.github.pagehelper.PageHelper;
-import group.jsjxh.community.bean.DiscoverQuestionBean;
+import group.jsjxh.community.dto.DiscoverQuestionDto;
 import group.jsjxh.community.bean.QuestionBean;
 import group.jsjxh.community.bean.TagBean;
 import group.jsjxh.community.bean.User;
@@ -12,7 +12,6 @@ import group.jsjxh.community.util.AssertUtil;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.annotation.Resource;
 import java.util.*;
 
@@ -55,12 +54,12 @@ public class QuestionResolverService {
 
 
     @Cacheable(cacheNames = "ques",key = "#methodName+'['+#pageNo+','+#pageSize+']'")
-    public List<DiscoverQuestionBean> discoberQuestionAll(Integer pageNo, Integer pageSize){
+    public List<DiscoverQuestionDto> discoberQuestionAll(Integer pageNo, Integer pageSize){
         List<QuestionBean> questionAll = this.getQuestionAll(pageNo, pageSize);
-        List<DiscoverQuestionBean> discoverQuestionBeans=new ArrayList<>(questionAll.size());
+        List<DiscoverQuestionDto> discoverQuestionDtos =new ArrayList<>(questionAll.size());
         Integer questionNo,author;
         for(QuestionBean questionBean:questionAll){
-            DiscoverQuestionBean discoverQuestionBean = new DiscoverQuestionBean();
+            DiscoverQuestionDto discoverQuestionDto = new DiscoverQuestionDto();
             questionNo=questionBean.getNo();
             author=questionBean.getAuthor();
             //获取每个问题的标记
@@ -71,14 +70,14 @@ public class QuestionResolverService {
             //获取每个问题的发布者
             User userByNo = userService.getUserByNo(author);
             //设置到对象中
-            discoverQuestionBean.setQuestionBean(questionBean);
-            discoverQuestionBean.setTags(tags);
-            discoverQuestionBean.setAuthor(userByNo.getName());
-            discoverQuestionBean.setPicurl(userByNo.getPicurl());
+            discoverQuestionDto.setQuestionBean(questionBean);
+            discoverQuestionDto.setTags(tags);
+            discoverQuestionDto.setAuthor(userByNo.getName());
+            discoverQuestionDto.setPicurl(userByNo.getPicurl());
             //装入集合
-            discoverQuestionBeans.add(discoverQuestionBean);
+            discoverQuestionDtos.add(discoverQuestionDto);
         }
-        return discoverQuestionBeans;
+        return discoverQuestionDtos;
     }
 
     @Cacheable(cacheNames = "ques",key = "'['+#pageNo+','+#pageSize+']'")

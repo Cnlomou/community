@@ -18,6 +18,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 @Service
@@ -27,7 +28,7 @@ public class UserService {
     UserDao userDao;
 
     @Transactional
-    public void saveUserInfo(@Nullable GithubUserInfo userInfo, HttpServletRequest request, HttpServletResponse response){
+    public void saveUserInfo(@NotNull GithubUserInfo userInfo, HttpServletRequest request, HttpServletResponse response){
         String uuid= UuidUtil.uuid();
         User user = this.getUserByAccount_id(userInfo.getId());//数据库找不到该数据返回null
         if(user ==null){

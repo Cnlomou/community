@@ -11,5 +11,5 @@ public class User {
     private String token;
     private Date create_at;
     private Date update_at;
-    private String picUrl;
+    private String picurl;
 }

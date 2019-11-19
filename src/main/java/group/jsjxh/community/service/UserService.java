@@ -35,7 +35,7 @@ public class UserService {
             user.setAccount_id(userInfo.getId());
             user.setName(UserUtil.userName(userInfo.getName()));
             user.setToken(uuid);
-            user.setPicUrl(userInfo.getAvatar_url());
+            user.setPicurl(userInfo.getAvatar_url());
             userDao.saveUser(user);
         }
         else{
@@ -50,19 +50,24 @@ public class UserService {
         request.getSession().setAttribute("user",user );
     }
 
-    @Cacheable(cacheNames = "user",key = "account_id",condition = "#result!=null")
+    @Cacheable(cacheNames = "user",key = "#methodName+#account_id",condition = "#result!=null")
     public  User getUserByAccount_id(Long account_id){
         return  userDao.findUserByAccount_id(account_id);
     }
-    @Cacheable(cacheNames = "user",key = "token",condition = "#result!=null")
+    @Cacheable(cacheNames = "user",key = "#token",condition = "#result!=null")
     public User getUserByTokne(String token){
         return  userDao.findUserByToken(token);
     }
 
+    @Cacheable(cacheNames = "user",key = "#methodName+'['+#no+']'",condition = "#result!=null")
+    public User getUserByNo(Integer no){
+        return userDao.finUserByNo(no);
+    }
+
     @Transactional
     @Caching(put = {
-            @CachePut(cacheNames = "user",key ="oldToken",condition = "oldToken!=null"),
-            @CachePut(cacheNames = "user",key = "user.account_id")
+            @CachePut(cacheNames = "user",key ="#oldToken",condition = "#oldToken!=null"),
+            @CachePut(cacheNames = "user",key = "#user.account_id")
     })
     public User updateToken(User user,String oldToken){
         userDao.updateToken(user);

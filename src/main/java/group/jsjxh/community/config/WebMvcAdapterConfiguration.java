@@ -56,7 +56,7 @@ public class WebMvcAdapterConfiguration implements WebMvcConfigurer {
             public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
 
             }
-        }).excludePathPatterns(Arrays.asList("/callback","/")).addPathPatterns("/**");      //主页请求的servletpath是'/'
+        }).excludePathPatterns(Arrays.asList("/callback","/","/ajax/**")).addPathPatterns("/**");      //主页请求的servletpath是'/'
     }
     private String getCookieToken(HttpServletRequest request){
 

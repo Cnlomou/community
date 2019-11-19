@@ -1,18 +1,20 @@
 package group.jsjxh.community.controller;
 
+import com.github.pagehelper.PageHelper;
+import group.jsjxh.community.bean.DiscoverQuestionBean;
 import group.jsjxh.community.bean.QuestionBean;
 import group.jsjxh.community.bean.User;
 import group.jsjxh.community.exception.ParamNoFoundException;
 import group.jsjxh.community.service.QuestionResolverService;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,12 +45,26 @@ public class QuestionPublishController {
         QuestionBean questionBean = new QuestionBean();
         questionBean.setTitle(title);
         questionBean.setContent(content);
-        questionBean.setTag(tags);
-        questionBean = questionResolverService.publishQuestion(questionBean);
+        questionBean.setAuthor(author);
+        questionBean = questionResolverService.publishQuestion(questionBean,tags);
         if(questionBean.getNo()!=0){
             objectObjectHashMap.put("code","ok");
             objectObjectHashMap.put("msg","发布成功");
         }
         return objectObjectHashMap;
+    }
+    @GetMapping("/ajax/getQuestion")
+    @ResponseBody
+    public Map<String,Object> getDiscoverQuestion(@RequestParam("pageNo") Integer pageNo,
+                                                  @RequestParam("pageSize") Integer pageSize){
+        Map<String,Object> res=new HashMap<>();
+        if(pageNo==null||pageSize==null){
+            res.put("code","no");
+            res.put("msg","参数传递错误");
+            return res;
+        }
+        res.put("code","ok");
+        res.put("ques",questionResolverService.discoberQuestionAll(pageNo,pageSize));
+        return  res;
     }
 }

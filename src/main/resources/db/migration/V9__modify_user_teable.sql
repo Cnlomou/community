@@ -1,2 +1,2 @@
 alter table TB_USER
-	add picutrl varchar(100);
+	add picurl varchar(100);

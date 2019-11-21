@@ -1,16 +1,21 @@
 package group.jsjxh.community.provider;
 
+import group.jsjxh.community.bean.GithubUserInfo;
+import group.jsjxh.community.config.GithubAuthorizeInfoProvider;
 import group.jsjxh.community.dto.AccessTokenDTO;
 import group.jsjxh.community.dto.AccessTokenProvider;
 import group.jsjxh.community.util.FormateUtil;
 import okhttp3.*;
+import org.slf4j.ILoggerFactory;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.logging.Logger;
 
 public class GithubUserInfoProvider {
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
-
+    private static org.slf4j.Logger logger= LoggerFactory.getLogger(GithubUserInfoProvider.class);
     private OkHttpClient client = new OkHttpClient();
 
     public AccessTokenProvider getAccessToken(AccessTokenDTO accessTokenDTO,String accessTokenUrl){

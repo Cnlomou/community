@@ -9,10 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,12 +38,29 @@ public class QuestionPublishController {
             return  objectObjectHashMap;
         }
         Integer author=((User)session.getAttribute("user")).getId();
-        QuestionBean questionBean = new QuestionBean(0,title,content,tags,new Date(),author);
-        questionBean = questionResolverService.publishQuestion(questionBean);
+        QuestionBean questionBean = new QuestionBean();
+        questionBean.setTitle(title);
+        questionBean.setContent(content);
+        questionBean.setAuthor(author);
+        questionBean = questionResolverService.publishQuestion(questionBean,tags);
         if(questionBean.getNo()!=0){
             objectObjectHashMap.put("code","ok");
             objectObjectHashMap.put("msg","发布成功");
         }
         return objectObjectHashMap;
+    }
+    @GetMapping("/ajax/getQuestion")
+    @ResponseBody
+    public Map<String,Object> getDiscoverQuestion(@RequestParam("pageNo") Integer pageNo,
+                                                  @RequestParam("pageSize") Integer pageSize){
+        Map<String,Object> res=new HashMap<>();
+        if(pageNo==null||pageSize==null){
+            res.put("code","no");
+            res.put("msg","参数传递错误");
+            return res;
+        }
+        res.put("code","ok");
+        res.put("ques",questionResolverService.discoberQuestionAll(pageNo,pageSize));
+        return  res;
     }
 }

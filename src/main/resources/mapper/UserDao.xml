@@ -8,7 +8,7 @@
     </sql>
     <sql id="showField">
         tb_user.id,
-        tb_user.ACCOUNT_ID,tb_user .NAME,tb_user .TOKEN,tb_user.CREATE_AT,tb_user.UPDATE_AT
+        tb_user.ACCOUNT_ID,tb_user .NAME,tb_user .TOKEN,tb_user.CREATE_AT,tb_user.UPDATE_AT,tb_user.picurl
         FROM <include refid="table"/>
     </sql>
     <resultMap id="userMap" type="group.jsjxh.community.bean.User">
@@ -38,7 +38,7 @@
         where tb_user.account_id=#{account_id}
     </select>
     <insert id="saveUser" parameterType="group.jsjxh.community.bean.User" keyProperty="id" useGeneratedKeys="true">
-        insert into tb_user values(default,#{account_id},#{name},#{token},now() ,now())
+        insert into tb_user values(default,#{account_id},#{name},#{token},now() ,now(),#{picurl})
     </insert>
 
     <update id="updateToken" parameterType="User">

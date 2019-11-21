@@ -8,6 +8,19 @@
     <link rel="stylesheet" th:href="@{/css/community.css}">
     <script type="application/javascript" th:src="@{webjars/jquery/3.0.0/jquery.min.js}"></script>
     <script type="application/javascript" th:src="@{webjars/bootstrap/4.3.0/js/bootstrap.min.js}"></script>
+    <style>
+        .discover-question{
+            margin: 0px;
+            padding: 0px;
+        }
+        .question-item{
+            margin-top: 20px;
+        }
+        img{
+            margin: 0px;
+            padding: 0px;
+        }
+    </style>
 </head>
 <body>
 <div class="container-fluid">
@@ -16,7 +29,9 @@
         <div class="row">
         <div class="col-lg-9 col-md-12 col-sm-12 col-xs-12">
             <h2 class="discover-lable"><span class="glyphicon glyphicon-list" aria-hidden="true"></span>发现</h2>
-            <div class="media">
+            <div class="discover-question">
+            </div>
+            <div class="media question-item">
                 <div class="media-left">
                     <a href="#">
                         <img class="media-object user-image" src="https://avatars0.githubusercontent.com/u/48235325?v=4" alt="没有这个图">
@@ -35,5 +50,27 @@
         </div>
     </div>
 </div>
+<script>
+    $.get("/ajax/getQuestion",{pageNo:1,pageSize:5},function(data){
+        if(data.code=='ok'){
+            var $discover_question=$('.discover-question');
+            $(data.ques).each(function(){
+                $discover_question.append("<div class=\"media question-item\">" +
+                    "                <div class=\"media-left\">" +
+                    "                    <a href=\"#\">" +
+                    "                        <img class=\"media-object user-image\" src=\""+ this.picurl+"\" alt=\"没有这个图\">" +
+                    "                    </a>" +
+                    "                </div>" +
+                    "                <div class=\"media-body\">" +
+                    "                    <h4 class=\"media-heading\">"+this.questionBean.title+"</h4>" +
+                    "                    "+this.questionBean.content+"<br>" +
+                    "                    <span class=\"des\">点赞·"+this.questionBean.like+" 踩·"+this.questionBean.shit+" 浏览·"+this.questionBean.read+" 评论·20</span>" +
+                    "                </div>" +
+                    "                       </div>");
+            });
+        }
+    },'json');
+
+</script>
 </body>
 </html>

@@ -47,13 +47,14 @@ public class QuestionResolverService {
     public TagBean getTag(String name){
         return tagDao.getTagByName(name);
     }
+
     @Cacheable(cacheNames = "tag",key ="#questionNo" )
     public List<TagBean> getTag(Integer questionNo){
         return tagDao.findTagByQuestionNo(questionNo);
     }
 
 
-    @Cacheable(cacheNames = "ques",key = "#methodName+'['+#pageNo+','+#pageSize+']'")
+    @Cacheable(cacheNames = "ques",key = "methodName+'['+#pageNo+','+#pageSize+']'")
     public List<DiscoverQuestionDto> discoberQuestionAll(Integer pageNo, Integer pageSize){
         List<QuestionBean> questionAll = this.getQuestionAll(pageNo, pageSize);
         List<DiscoverQuestionDto> discoverQuestionDtos =new ArrayList<>(questionAll.size());

@@ -37,7 +37,7 @@ public class WebMvcAdapterConfiguration implements WebMvcConfigurer {
                         String cookieToken = getCookieToken(request);
                         if(cookieToken!=null)
                              user=userService.getUserByTokne(cookieToken);
-                        if(user==null)
+                        if(user==null&&!request.getServletPath().equals("/"))   //避免在主页时多次重定向
                             throw  new RuntimeException();
                         request.getSession().setAttribute("user",user);
                     }
@@ -56,7 +56,7 @@ public class WebMvcAdapterConfiguration implements WebMvcConfigurer {
             public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
 
             }
-        }).excludePathPatterns(Arrays.asList("/callback","/","/ajax/**")).addPathPatterns("/**");      //主页请求的servletpath是'/'
+        }).excludePathPatterns(Arrays.asList("/callback","/ajax/**")).addPathPatterns("/**");      //主页请求的servletpath是'/'
     }
     private String getCookieToken(HttpServletRequest request){
 

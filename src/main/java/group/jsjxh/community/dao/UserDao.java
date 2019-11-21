@@ -1,10 +1,7 @@
 package group.jsjxh.community.dao;
 
 import group.jsjxh.community.bean.User;
-import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Select;
-
-import java.util.Date;
 
 public interface UserDao {
 

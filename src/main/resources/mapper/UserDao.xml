@@ -8,7 +8,7 @@
     </sql>
     <sql id="showField">
         tb_user.id,
-        tb_user.ACCOUNT_ID,tb_user .NAME,tb_user .TOKEN,tb_user.CREATE_AT,tb_user.UPDATE_AT
+        tb_user.ACCOUNT_ID,tb_user .NAME,tb_user .TOKEN,tb_user.CREATE_AT,tb_user.UPDATE_AT,tb_user.picurl
         FROM <include refid="table"/>
     </sql>
     <resultMap id="userMap" type="group.jsjxh.community.bean.User">

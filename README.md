@@ -8,5 +8,10 @@
 - springboot
 - mybatis
 - thymeleaf
+- mybatis-generator
+```shell script
+mvn mybatis-generator:generate 
+mvn -Dmybatis.generator.overwrite=true mybatis-generator:generate
+```
 ## 目的
 用于练习自己的实战能力

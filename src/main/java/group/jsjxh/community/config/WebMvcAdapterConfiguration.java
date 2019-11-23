@@ -1,10 +1,8 @@
 package group.jsjxh.community.config;
 
 import group.jsjxh.community.bean.User;
-import group.jsjxh.community.dao.UserDao;
 import group.jsjxh.community.service.UserService;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -56,7 +54,7 @@ public class WebMvcAdapterConfiguration implements WebMvcConfigurer {
             public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
 
             }
-        }).excludePathPatterns(Arrays.asList("/callback","/ajax/**")).addPathPatterns("/**");      //主页请求的servletpath是'/'
+        }).excludePathPatterns(Arrays.asList("/callback","/ajax/**","/*.ico")).addPathPatterns("/**");      //主页请求的servletpath是'/'
     }
     private String getCookieToken(HttpServletRequest request){
 

@@ -7,7 +7,10 @@ body{
     margin-left: 50px;
     margin-right: 50px;
     padding-top: 20px;
-    padding-bottom: 50px;
+    padding-bottom: 20px;
+}
+.discover-body{
+    padding-bottom: 120px;
 }
 .publish-lable,.discover-lable,ul,li,p{
     padding: 0px;

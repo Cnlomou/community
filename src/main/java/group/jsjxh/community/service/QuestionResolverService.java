@@ -1,12 +1,11 @@
 package group.jsjxh.community.service;
 
 import com.github.pagehelper.PageHelper;
+import group.jsjxh.community.bean.*;
+import group.jsjxh.community.dao.QuesTagMapper;
+import group.jsjxh.community.dao.QuestionMapper;
+import group.jsjxh.community.dao.TagMapper;
 import group.jsjxh.community.dto.DiscoverQuestionDto;
-import group.jsjxh.community.bean.QuestionBean;
-import group.jsjxh.community.bean.TagBean;
-import group.jsjxh.community.bean.User;
-import group.jsjxh.community.dao.QuestionDao;
-import group.jsjxh.community.dao.TagDao;
 import group.jsjxh.community.exception.ParamNoFoundException;
 import group.jsjxh.community.util.AssertUtil;
 import org.springframework.cache.annotation.Cacheable;
@@ -18,60 +17,68 @@ import java.util.*;
 @Service
 public class QuestionResolverService {
     @Resource
-    QuestionDao questionDao;
+    QuestionMapper questionMapper;
 
     @Resource
     UserService userService;
     @Resource
-    TagDao tagDao;
+    TagMapper tagMapper;
+    @Resource
+    QuesTagMapper quesTagMapper;
 
     @Transactional
-    public QuestionBean publishQuestion(QuestionBean questionBean,String[] tags) throws ParamNoFoundException {
-        AssertUtil.Null(questionBean.getContent(),"没有内容");
-        AssertUtil.Null(questionBean.getTitle(),"没有标题");
-        questionDao.insertQuestion(questionBean);
+    public Question publishQuestion(Question question, String[] tags) throws ParamNoFoundException {
+        AssertUtil.Null(question.getQcontent(),"没有内容");
+        AssertUtil.Null(question.getQtitle(),"没有标题");
+        questionMapper.insertSelective(question);
         for(String tag:tags){
-            TagBean tagBean = this.getTag(tag);     //在数据库中为找到指定的数据会返回null
+            Tag tagBean = this.getTag(tag);     //在数据库中为找到指定的数据会返回null
             if(tagBean==null){
-                tagBean=new TagBean();
-                tagBean.setName(tag);
-                tagBean.setCreate_at(new Date());
-                tagDao.insertTag(tagBean);
+                tagBean=new Tag();
+                tagBean.setTname(tag);
+                tagBean.setTcreateAt(new Date());
+                tagMapper.insertSelective(tagBean);
             }
-            tagDao.insertQuesTag(questionBean.getNo(),tagBean.getNo());
+            QuesTagKey record = new QuesTagKey();
+            record.setQesno(question.getQno());
+            record.setTagno(tagBean.getTno());
+            quesTagMapper.insertSelective(record);
         }
-        return questionBean;
+        return question;
     }
 
     @Cacheable(cacheNames = "tag",key = "#name",condition = "#result!=null")
-    public TagBean getTag(String name){
-        return tagDao.getTagByName(name);
+    public Tag getTag(String name){
+        TagExample example = new TagExample();
+        example.createCriteria()
+                .andTnameEqualTo(name);
+        return tagMapper.selectByExample(example).get(0);
     }
 
     @Cacheable(cacheNames = "tag",key ="#questionNo" )
-    public List<TagBean> getTag(Integer questionNo){
-        return tagDao.findTagByQuestionNo(questionNo);
+    public List<Tag> getTag(Integer questionNo){
+        return tagMapper.selectTagByQuestionNo(questionNo);
     }
 
 
     @Cacheable(cacheNames = "ques",key = "methodName+'['+#pageNo+','+#pageSize+']'")
     public List<DiscoverQuestionDto> discoberQuestionAll(Integer pageNo, Integer pageSize){
-        List<QuestionBean> questionAll = this.getQuestionAll(pageNo, pageSize);
+        List<Question> questionAll = this.getQuestionAll(pageNo, pageSize);
         List<DiscoverQuestionDto> discoverQuestionDtos =new ArrayList<>(questionAll.size());
         Integer questionNo,author;
-        for(QuestionBean questionBean:questionAll){
+        for(Question questionBean:questionAll){
             DiscoverQuestionDto discoverQuestionDto = new DiscoverQuestionDto();
-            questionNo=questionBean.getNo();
-            author=questionBean.getAuthor();
+            questionNo=questionBean.getQno();
+            author=questionBean.getQauthor();
             //获取每个问题的标记
-            List<TagBean> tag = this.getTag(questionNo);
+            List<Tag> tag = this.getTag(questionNo);
             String[] tags=new String[tag.size()];
             for(int i=0;i<tags.length;i++)
-                tags[i]=tag.get(i).getName();
+                tags[i]=tag.get(i).getTname();
             //获取每个问题的发布者
             User userByNo = userService.getUserByNo(author);
             //设置到对象中
-            discoverQuestionDto.setQuestionBean(questionBean);
+            discoverQuestionDto.setQuestion(questionBean);
             discoverQuestionDto.setTags(tags);
             discoverQuestionDto.setAuthor(userByNo.getName());
             discoverQuestionDto.setPicurl(userByNo.getPicurl());
@@ -82,8 +89,15 @@ public class QuestionResolverService {
     }
 
     @Cacheable(cacheNames = "ques",key = "'['+#pageNo+','+#pageSize+']'")
-    public List<QuestionBean> getQuestionAll(Integer pageNo, Integer pageSize){
+    public List<Question> getQuestionAll(Integer pageNo, Integer pageSize){
         PageHelper.startPage(pageNo,pageSize);
-        return questionDao.findQuestionAll();
+        return questionMapper.selectByExampleWithBLOBs(new QuestionExample());
+    }
+
+    @Cacheable(cacheNames = "ques",key = "#root.methodName+'_'+#pageSize")
+    public Integer getPageCount(Integer pageSize){
+        QuestionExample example = new QuestionExample();
+        long count = questionMapper.countByExample(example);
+        return Math.toIntExact((count + pageSize - 1L) / pageSize);
     }
 }

@@ -20,6 +20,11 @@
             margin: 0px;
             padding: 0px;
         }
+        .page-control{
+            width: 270px;
+            right: 30px;
+            position: absolute;
+        }
     </style>
 </head>
 <body>
@@ -31,18 +36,25 @@
             <h2 class="discover-lable"><span class="glyphicon glyphicon-list" aria-hidden="true"></span>发现</h2>
             <div class="discover-question">
             </div>
-            <div class="media question-item">
-                <div class="media-left">
-                    <a href="#">
-                        <img class="media-object user-image" src="https://avatars0.githubusercontent.com/u/48235325?v=4" alt="没有这个图">
-                    </a>
-                </div>
-                <div class="media-body">
-                    <h4 class="media-heading">怎么快速学会spring boot 开发</h4>
-                    首先spring boot 是一个快速开发框架，是如今java最热门的一个开发框架<br>
-                    <span class="des">点赞·10 踩·1 浏览·100 评论·20</span>
-                </div>
-            </div>
+                <nav aria-label="Page navigation" class="page-control">
+                <ul class="pagination">
+                    <li id="pre" style="visibility: hidden">
+                        <a href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page active"><a href="#">1</a></li>
+                    <li class="page"><a href="#" >2</a></li>
+                    <li class="page"><a href="#">3</a></li>
+                    <li class="page"><a href="#">4</a></li>
+                    <li class="page"><a href="#">5</a></li>
+                    <li id="next">
+                        <a href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+                </nav>
         </div>
         <div class="col-lg-3 col-md-12 col-sm-12 col-xs-12" style="padding-left: 30px">
             <h4>热门话题</h4>
@@ -50,27 +62,65 @@
         </div>
     </div>
 </div>
+<script th:src="@{/js/index.js}"></script>
 <script>
-    $.get("/ajax/getQuestion",{pageNo:1,pageSize:5},function(data){
-        if(data.code=='ok'){
-            var $discover_question=$('.discover-question');
-            $(data.ques).each(function(){
-                $discover_question.append("<div class=\"media question-item\">" +
-                    "                <div class=\"media-left\">" +
-                    "                    <a href=\"#\">" +
-                    "                        <img class=\"media-object user-image\" src=\""+ this.picurl+"\" alt=\"没有这个图\">" +
-                    "                    </a>" +
-                    "                </div>" +
-                    "                <div class=\"media-body\">" +
-                    "                    <h4 class=\"media-heading\">"+this.questionBean.title+"</h4>" +
-                    "                    "+this.questionBean.content+"<br>" +
-                    "                    <span class=\"des\">点赞·"+this.questionBean.like+" 踩·"+this.questionBean.shit+" 浏览·"+this.questionBean.read+" 评论·20</span>" +
-                    "                </div>" +
-                    "                       </div>");
-            });
-        }
-    },'json');
+    var $page=$('.page');
+    $page.click(function () {
+            clear();
+            var pageNo=$(this).text();
+            var res=pageNoReplace(pageNo,$page,this);
+            getQuestin(pageNo,10);
+            var cur=this;
+            $page.each(function () {
+                if(this===cur){
+                    if(res===0)
+                        $(this).attr('class','page active');
+                }else{
+                    $(this).attr('class','page');
+                }
+            })
+        if(res!==0)
+            $($page[4-res]).attr('class','page active');    //jquery对象用[]返回返回的是dom对象
+    });
+    $page[0].click();   //默认点击第一个
+    function pageNoReplace(pageNostr,$page,cur) {
 
+        var pageNo=Number(pageNostr);
+        var res=0;
+        if(pageNo===1){
+            $('#pre').css("visibility","hidden");
+        }else {
+            $('#pre').css("visibility","visible");
+        }
+
+        $('#next').css('visibility','visible');
+        if(cur===$page[4]){
+            if(pagecount-pageNo>2){
+                $page.each(function () {
+                    $(this).html('<a href="#" >'+(Number($(this).text())+2)+'</a>');
+                });
+                res=2;
+            }else {
+                var var2=pagecount-pageNo;
+                if(var2>0){
+                    $page.each(function () {
+                        $(this).html('<a href="#" >'+(Number($(this).text())+var2)+'</a>');
+                    });
+                    res=var2;
+                }
+                $('#next').css('visibility','hidden');
+            }
+        }
+        return res;
+    }
+    $('#pre').click(function () {
+        var num=Number($('.active')[0].text());
+        $('page')[num-2].click();
+    });
+    $('#next').click(function () {
+        var num=Number($('.active')[0].text());
+        $('page')[num].click();
+    })
 </script>
 </body>
 </html>

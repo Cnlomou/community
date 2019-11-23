@@ -1,6 +1,6 @@
 package group.jsjxh.community.controller;
 
-import group.jsjxh.community.bean.QuestionBean;
+import group.jsjxh.community.bean.Question;
 import group.jsjxh.community.bean.User;
 import group.jsjxh.community.exception.ParamNoFoundException;
 import group.jsjxh.community.service.QuestionResolverService;
@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
-public class QuestionPublishController {
+public class QuestionController {
     @Resource
     QuestionResolverService questionResolverService;
 
@@ -38,15 +38,11 @@ public class QuestionPublishController {
             return  objectObjectHashMap;
         }
         Integer author=((User)session.getAttribute("user")).getId();
-        QuestionBean questionBean = new QuestionBean();
-        questionBean.setTitle(title);
-        questionBean.setContent(content);
-        questionBean.setAuthor(author);
-        questionBean = questionResolverService.publishQuestion(questionBean,tags);
-        if(questionBean.getNo()!=0){
-            objectObjectHashMap.put("code","ok");
-            objectObjectHashMap.put("msg","发布成功");
-        }
+        Question question=new Question();
+        question.setQtitle(title);
+        question.setQcontent(content);
+        question.setQauthor(author);
+       question=questionResolverService.publishQuestion(question,tags);
         return objectObjectHashMap;
     }
     @GetMapping("/ajax/getQuestion")
@@ -54,13 +50,14 @@ public class QuestionPublishController {
     public Map<String,Object> getDiscoverQuestion(@RequestParam("pageNo") Integer pageNo,
                                                   @RequestParam("pageSize") Integer pageSize){
         Map<String,Object> res=new HashMap<>();
-        if(pageNo==null||pageSize==null){
+        if(pageNo==null||pageSize==null||pageSize.equals(0)){
             res.put("code","no");
             res.put("msg","参数传递错误");
             return res;
         }
         res.put("code","ok");
         res.put("ques",questionResolverService.discoberQuestionAll(pageNo,pageSize));
+        res.put("pageCount",questionResolverService.getPageCount(pageSize).toString());
         return  res;
     }
 }
